@@ -1,3 +1,8 @@
+import streamlit as st
+
+st.title("Hello Streamlit 👋")
+st.write("If you can see this, deployment works!")
+
 from flask import Flask, render_template, request, jsonify
 from openai import OpenAI
 import os
