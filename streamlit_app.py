@@ -2,40 +2,30 @@ import streamlit as st
 from openai import OpenAI
 import os
 
-st.title("Hello Streamlit 👋")
-st.write("If you can see this, deployment works!")
-
-from flask import Flask, render_template, request, jsonify
-from openai import OpenAI
-import os
-
-app = Flask(__name__)
-
-# Use environment variable for security
+# Load OpenAI client (make sure OPENAI_API_KEY is set in Streamlit secrets)
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-@app.route("/")
-def home():
-    return render_template("index.html")
+st.title("GPT-Based Smart Assistant 🤖")
 
-@app.route("/chat", methods=["POST"])
-def chat():
-    user_message = request.json.get("message")
+# Input box for user message
+user_input = st.text_input("Ask me something:")
 
-    try:
-        completion = client.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": user_message}
-            ],
-            max_tokens=150,
-            temperature=0.7
-        )
-        response = completion.choices[0].message.content
-        return jsonify({"response": response})
-    except Exception as e:
-        return jsonify({"error": str(e)})
+# Send button
+if st.button("Send"):
+    if user_input:
+        try:
+            completion = client.chat.completions.create(
+                model="gpt-4o",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": user_input}
+                ],
+                max_tokens=150
+            )
+            response = completion.choices[0].message.content
+            st.success(response)
+        except Exception as e:
+            st.error(f"Error: {str(e)}")
+    else:
+        st.warning("Please type a message first.")
 
-if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)
