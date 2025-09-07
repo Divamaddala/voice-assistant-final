@@ -1,4 +1,6 @@
 import streamlit as st
+from openai import OpenAI
+import os
 
 st.title("Hello Streamlit 👋")
 st.write("If you can see this, deployment works!")
