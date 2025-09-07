@@ -1,0 +1,28 @@
+# Delete the broken .gitignore
+Remove-Item .gitignore
+
+# Create a proper .gitignore file
+@"
+# API Keys and Secrets
+apikey.py
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment
+.env
+.venv
+env/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+"@ | Out-File -FilePath .gitignore -Encoding UTF8
